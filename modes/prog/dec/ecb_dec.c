@@ -77,7 +77,10 @@ void EcbDec(HexWord* keyScheduling, FILE *iFile, FILE *oFile){
         if ((int)out_buff[i] == (int)out_buff[15]) {
             pad_counter++;
         }
+	else {break;}
     }
+
+    if ((int)out_buff[15] == 10){pad_counter--;}
     
     if (pad_counter + 1 == (int)out_buff[15]) {
         fseek(oFile, 0, SEEK_END);       // Seek to the End of the file
