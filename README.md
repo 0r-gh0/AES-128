@@ -37,4 +37,4 @@ If `make` command is not working, then execute the program manually by :
 
 ```bash
 gcc -o aes main.c run/prog/utils.c run/prog/algo.c run/prog/enc_dec.c modes/prog/enc/cfb_enc.c modes/prog/dec/cfb_dec.c modes/prog/enc/ofb_enc.c modes/prog/dec/ofb_dec.c modes/prog/enc/ecb_enc.c modes/prog/dec/ecb_dec.c modes/prog/enc/cbc_enc.c modes/prog/dec/cbc_dec.c
-```# AES-128
+```
