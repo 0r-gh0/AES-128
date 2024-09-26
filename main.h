@@ -2,9 +2,11 @@
 #define MAIN_H
 
 // Including the necessary standard libraries
+#define _POSIX1_SOURCE 2
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <unistd.h>
 #include <openssl/rand.h>
 
 // Byte Containing 2 Hexadecimal Characters
@@ -20,8 +22,5 @@ typedef union { // Union allocates one common storage space for all its members
 typedef struct {    // "typedef" provides existing data types with a new name
     HexByte bytes[4]; // Array of 4 HexBytes to form a word (8 hex characters)
 } HexWord;
-
-// Function Declaration Needed before usage
-int ftruncate(int oFile, int newSize);
 
 #endif // MAIN_H
