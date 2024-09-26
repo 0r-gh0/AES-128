@@ -4,6 +4,7 @@
 // Including the necessary standard libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <openssl/rand.h>
 
 // Byte Containing 2 Hexadecimal Characters
 typedef union { // Union allocates one common storage space for all its members
@@ -20,6 +21,6 @@ typedef struct {    // "typedef" provides existing data types with a new name
 } HexWord;
 
 // Function Declaration Needed before usage
-int ftruncate(int oFile, off_t newSize);
+int ftruncate(int oFile, int newSize);
 
 #endif // MAIN_H

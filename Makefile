@@ -21,9 +21,12 @@ SRCS = main.c \
 # Compiler flags
 CFLAGS = -Wall -Wextra
 
+# Linker flags
+LDFLAGS = -lssl -lcrypto
+
 # Default target: compile everything
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
 
 # Clean target: removes the compiled files
 clean:

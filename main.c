@@ -2,6 +2,7 @@
 #include "run/include/algo.h"
 #include "run/include/utils.h"
 #include "main.h"      // For HexWord, HexByte, and any custom types
+// #include <openssl/rand.h>
 
 #include "modes/include/enc/cfb_enc.h"    // For OfbEnc function
 #include "modes/include/dec/cfb_dec.h"    // For OfbDec function (if decryption is also needed)
@@ -33,10 +34,13 @@ int main() {
     keyExpansion(rowKeyArray, keyScheduling, 4);    // Run the Key Scheduling Algorithm and store it inside the
     // KeyScheduling DONE !
     // The Keys being stored in Array keyScheduling[]
-    
-    unsigned char temp_iv[16];                // 16-byte IV
-    arc4random_buf(temp_iv, sizeof(temp_iv)); // Generate random IV
 
+    unsigned char temp_iv[16];         // Declare a 16-byte array for the IV
+     if (RAND_priv_bytes(temp_iv, sizeof(temp_iv)) != 1){
+        printf("Error Generating Random IV\n");
+        return 1;
+    }
+    
     // Now Store that IV in HexWord Format
     IV[0].bytes[0].nibbles.low = temp_iv[0];
     IV[0].bytes[0].nibbles.high = temp_iv[0] >> 4;
