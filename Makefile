@@ -26,7 +26,7 @@ LDFLAGS = -lssl -lcrypto
 
 # Default target: compile everything
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS)
+	@{ time $(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LDFLAGS); echo "Compilation finished successfully!"; echo "To run the program please press "./aes" in Terminal";}
 
 # Clean target: removes the compiled files
 clean:

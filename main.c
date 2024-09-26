@@ -2,7 +2,6 @@
 #include "run/include/algo.h"
 #include "run/include/utils.h"
 #include "main.h"      // For HexWord, HexByte, and any custom types
-// #include <openssl/rand.h>
 
 #include "modes/include/enc/cfb_enc.h"    // For OfbEnc function
 #include "modes/include/dec/cfb_dec.h"    // For OfbDec function (if decryption is also needed)
@@ -19,6 +18,8 @@ int main() {
     FILE *iFile, *oFile;
     char fName[100];
     int choice, i_File = 0, ch_File;
+    clock_t enc_t, dec_t;
+    double time_taken;
 
     //  char *key = "d4bf5d30e0b452aeb84111f11e2798e5";    // Example KEY
     //  char *key = "3243f6a8885a308d313198a2e0370734";    // Example KEY
@@ -99,6 +100,7 @@ int main() {
     printf ("\nEnter the Mode of Operation for Encryption :: \n1) Electronic Code Book\n2) Cipher Block Chaining\n3) Cipher Feedback Mode\n4) Output Feedback Mode\n\nPlease enter your choice : ");
     scanf ("%d", &choice);
 
+    enc_t = clock();
     switch (choice) {
 	    case 1:  EcbEnc(keyScheduling, iFile, oFile);
 		     break;
@@ -115,10 +117,12 @@ int main() {
 	    default: printf("WRONG OPTION !\nQuitting !");
 		     return 0;
     }
+    enc_t = clock() - enc_t;
+    time_taken = ((double) enc_t)/CLOCKS_PER_SEC; // in seconds  
     
     fclose(iFile);
     fclose(oFile);
-    printf("ENCRYPTED !!!\nEncrypted File : 'encrypt.bin'\n");
+    printf("\nENCRYPTED !!!\nTime : %f Seconds\nEncrypted File : 'encrypt.bin'\n", time_taken);
 
     input_2[0] = IV[0];
     input_2[1] = IV[1];
@@ -135,26 +139,29 @@ int main() {
     printf ("\nDecrypting the File : 'encrypt.bin'\n\nEnter the Mode of Operation for Decryption :: \n1) Electronic Code Book\n2) Cipher Block Chaining\n3) Cipher Feedback Mode\n4) Output Feedback Mode\n\nPlease enter your choice : ");
     scanf ("%d", &choice);
 
+    dec_t = clock();
     switch (choice) {
         case 1:  EcbDec(keyScheduling, iFile, oFile);
             break;
 
         case 2:  CbcDec(input_2, keyScheduling, iFile, oFile);
-	    break;
+	        break;
 
-	case 3:  OfbDec(input_2, keyScheduling, iFile, oFile);
-	    break;
+        case 3:  OfbDec(input_2, keyScheduling, iFile, oFile);
+            break;
 
-	case 4:  CfbDec(input_2, keyScheduling, iFile, oFile);
-	    break;
+        case 4:  CfbDec(input_2, keyScheduling, iFile, oFile);
+            break;
 
-	default: printf("WRONG OPTION !\nQuitting !");
-	    return 0;
+        default: printf("WRONG OPTION !\nQuitting !");
+            return 0;
     }
+    dec_t = clock() - dec_t;
+    time_taken = ((double) dec_t)/CLOCKS_PER_SEC; // in seconds
 
     fclose(iFile);
     fclose(oFile);
-    printf("DECRYPTED !!!\nDecrypted File : 'decrypt.bin'\n");
+    printf("\nDECRYPTED !!!\nTime : %f Seconds\nDecrypted File : 'decrypt.bin'\n", time_taken);
 
     return 0;
 }

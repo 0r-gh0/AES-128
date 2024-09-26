@@ -4,6 +4,7 @@
 // Including the necessary standard libraries
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <openssl/rand.h>
 
 // Byte Containing 2 Hexadecimal Characters
