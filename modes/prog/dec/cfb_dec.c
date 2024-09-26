@@ -111,5 +111,14 @@ void CfbDec(HexWord* input_2, HexWord* keyScheduling, FILE *iFile, FILE *oFile) 
         long currentSize = ftell(oFile); // Determine the new File Size
         long newSize = currentSize - (int)out_buff[15];
         ftruncate(fileno(oFile), newSize); // Truncate the File
+        printf("\nDECRYPTED !!!\nDecrypted File : 'decrypt.bin'\n");
+    }
+
+    fclose(iFile);
+    fclose(oFile);
+
+    if (pad_counter + 1 != (int)out_buff[15]) {
+        printf("PADDING ERROR !\nTerminaing ..\n");
+        remove("decrypt.bin");
     }
 }
