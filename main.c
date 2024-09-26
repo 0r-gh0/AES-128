@@ -16,7 +16,7 @@ int main() {
     HexWord IV[4], input_2[4];
     
     FILE *iFile, *oFile;
-    char fName[100];
+    char fName_enc[100], fName_dec[100];
     int choice, i_File = 0, ch_File;
     clock_t enc_t, dec_t;
     double time_taken;
@@ -79,89 +79,100 @@ int main() {
     IV[3].bytes[3].nibbles.low = temp_iv[15];
     IV[3].bytes[3].nibbles.high = temp_iv[15] >> 4;
     
-    input_2[0] = IV[0];
-    input_2[1] = IV[1];
-    input_2[2] = IV[2];
-    input_2[3] = IV[3];
     
-    printf(":: AES ::\nEnter the file you want to encrypt : ");
-    // To take the file name as Input (Without using any additional header files like <string.h>)
-    while ((ch_File = getc(stdin)) != '\n' && ch_File != EOF && i_File < (int)sizeof(fName) - 1){
-	    fName[i_File++] = ch_File;}
-    fName[i_File] = '\0';		// Null terminating the String
-
-    iFile = fopen(fName, "rb");
-    oFile = fopen("encrypt.bin", "wb");
-
-    if (iFile == NULL || oFile == NULL) {
-        printf("File Couldn't be opened !!");
-    return 1; } 
+    printf(":: AES-128 ::\n");
    
-    printf ("\nEnter the Mode of Operation for Encryption :: \n1) Electronic Code Book\n2) Cipher Block Chaining\n3) Cipher Feedback Mode\n4) Output Feedback Mode\n\nPlease enter your choice : ");
+    printf ("\nEnter the Mode of Operation for Encryption :: \n1) Electronic Code Book (ECB)\n2) Cipher Block Chaining (CBC)\n3) Cipher Feedback Mode (CFB)\n4) Output Feedback Mode (OFB)\n5) PROCEED TO DECRYPT\n\nPlease enter your choice : ");
     scanf ("%d", &choice);
 
-    enc_t = clock();
-    switch (choice) {
-	    case 1:  EcbEnc(keyScheduling, iFile, oFile);
-		     break;
+    if ( choice != 5 ){
 
-	    case 2:  CbcEnc(input_2, keyScheduling, iFile, oFile);
-		     break;
+        input_2[0] = IV[0];
+        input_2[1] = IV[1];
+        input_2[2] = IV[2];
+        input_2[3] = IV[3];
 
-	    case 3:  OfbEnc(input_2, keyScheduling, iFile, oFile);
-		     break;
+        printf("Enter the file you want to encrypt : ");
+        // To take the file name as Input (Without using any additional header files like <string.h>)
+        while ((ch_File = getc(stdin)) != '\n' && ch_File != EOF && i_File < (int)sizeof(fName_enc) - 1){
+            fName_enc[i_File++] = ch_File;}
+        fName_enc[i_File] = '\0';		// Null terminating the String
 
-	    case 4:  CfbEnc(input_2, keyScheduling, iFile, oFile);
-		     break;
+        iFile = fopen(fName_enc, "rb");
+        oFile = fopen("encrypt.bin", "wb");
 
-	    default: printf("WRONG OPTION !\nQuitting !");
-		     return 0;
+        if (iFile == NULL || oFile == NULL) {
+            printf("File Couldn't be opened !!");
+        return 1; } 
+
+        enc_t = clock();
+        switch (choice) {
+            case 1:  EcbEnc(keyScheduling, iFile, oFile);
+                break;
+
+            case 2:  CbcEnc(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            case 3:  OfbEnc(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            case 4:  CfbEnc(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            default: printf("WRONG OPTION !\nQuitting !");
+                return 0;
+        }
+        enc_t = clock() - enc_t;
+        time_taken = ((double) enc_t)/CLOCKS_PER_SEC; // in seconds  
+        
+        printf("Encryption Time : %f Seconds\n", time_taken);
     }
-    enc_t = clock() - enc_t;
-    time_taken = ((double) enc_t)/CLOCKS_PER_SEC; // in seconds  
-    
-    fclose(iFile);
-    fclose(oFile);
-    printf("\nENCRYPTED !!!\nTime : %f Seconds\nEncrypted File : 'encrypt.bin'\n", time_taken);
 
-    input_2[0] = IV[0];
-    input_2[1] = IV[1];
-    input_2[2] = IV[2];
-    input_2[3] = IV[3];
-    
-    iFile = fopen("encrypt.bin", "rb");
-    oFile = fopen("decrypt.bin", "wb");
-
-    if (iFile == NULL || oFile == NULL) {
-        printf("File Couldn't be opened !!");
-    return 1; } 
- 
-    printf ("\nDecrypting the File : 'encrypt.bin'\n\nEnter the Mode of Operation for Decryption :: \n1) Electronic Code Book\n2) Cipher Block Chaining\n3) Cipher Feedback Mode\n4) Output Feedback Mode\n\nPlease enter your choice : ");
+    printf ("\nEnter the Mode of Operation for Decryption :: \n1) Electronic Code Book (ECB)\n2) Cipher Block Chaining (CBC)\n3) Cipher Feedback Mode (CFB)\n4) Output Feedback Mode (OFB)\n5) PROCEED TO EXIT ..\n\nPlease enter your choice : ");
     scanf ("%d", &choice);
 
-    dec_t = clock();
-    switch (choice) {
-        case 1:  EcbDec(keyScheduling, iFile, oFile);
-            break;
+    if ( choice != 5 ){
 
-        case 2:  CbcDec(input_2, keyScheduling, iFile, oFile);
-	        break;
+        input_2[0] = IV[0];
+        input_2[1] = IV[1];
+        input_2[2] = IV[2];
+        input_2[3] = IV[3];
 
-        case 3:  OfbDec(input_2, keyScheduling, iFile, oFile);
-            break;
+        printf("Enter the file you want to decrypt : ");
+        // To take the file name as Input (Without using any additional header files like <string.h>)
+        while ((ch_File = getc(stdin)) != '\n' && ch_File != EOF && i_File < (int)sizeof(fName_dec) - 1){
+            fName_dec[i_File++] = ch_File;}
+        fName_dec[i_File] = '\0';		// Null terminating the String
 
-        case 4:  CfbDec(input_2, keyScheduling, iFile, oFile);
-            break;
+        iFile = fopen(fName_dec, "rb");
+        oFile = fopen("decrypt.bin", "wb");
 
-        default: printf("WRONG OPTION !\nQuitting !");
-            return 0;
+        if (iFile == NULL || oFile == NULL) {
+            printf("File Couldn't be opened !!");
+        return 1; } 
+
+        dec_t = clock();
+        switch (choice) {
+            case 1:  EcbDec(keyScheduling, iFile, oFile);
+                break;
+
+            case 2:  CbcDec(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            case 3:  OfbDec(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            case 4:  CfbDec(input_2, keyScheduling, iFile, oFile);
+                break;
+
+            default: printf("WRONG OPTION !\nQuitting !");
+                return 0;
+        }
+        dec_t = clock() - dec_t;
+        time_taken = ((double) dec_t)/CLOCKS_PER_SEC; // in seconds
+
+        printf("Decryption Time : %f Seconds\n", time_taken);
     }
-    dec_t = clock() - dec_t;
-    time_taken = ((double) dec_t)/CLOCKS_PER_SEC; // in seconds
-
-    fclose(iFile);
-    fclose(oFile);
-    printf("\nDECRYPTED !!!\nTime : %f Seconds\nDecrypted File : 'decrypt.bin'\n", time_taken);
 
     return 0;
 }

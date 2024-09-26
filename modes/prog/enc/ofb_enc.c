@@ -158,4 +158,8 @@ void OfbEnc(HexWord* input_2, HexWord* keyScheduling, FILE *iFile, FILE *oFile) 
     out_buff[15] = output[3].bytes[3].nibbles.high << 4 | output[3].bytes[3].nibbles.low;
     
     fwrite(out_buff, 1, 16, oFile);
+
+    fclose(iFile);
+    fclose(oFile);
+    printf("\nENCRYPTED !!!\nEncrypted File : 'encrypt.bin'\n");
 }
